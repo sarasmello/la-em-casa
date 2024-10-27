@@ -1,6 +1,6 @@
 <?php 
-$pageTitle ="Adicionar Produto";
-include 'lib/includes/header.php'; 
+$pageTitle = "Adicionar Produto";
+include './lib/includes/header.php'; 
 ?>
 
 <?php
@@ -34,10 +34,45 @@ $result = $conn->query($sql);
         <input type="submit" value="Adicionar Produto">
     </form>
 
+    <h3>Produtos Cadastrados</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+           
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Consulta para buscar os produtos cadastrados + categoria
+            $sql_produtos = "SELECT p.id, p.nome AS produto_nome, c.nome AS categoria_nome 
+                             FROM produtos p 
+                             LEFT JOIN categorias c ON p.categoria_id = c.id";
+            $result_produtos = $conn->query($sql_produtos);
+
+            if ($result_produtos->num_rows > 0) {
+                // Exibição dos produtos na tabela
+                while ($row_produto = $result_produtos->fetch_assoc()) {
+                    echo "<tr>
+                            <td>{$row_produto['produto_nome']}</td>
+                            <td>{$row_produto['categoria_nome']}</td>
+                            <td>
+                                <a href='./lib/php/edit_product.php?id={$row_produto['id']}'>Editar</a> | 
+                                <a href='./lib/php/delete_product.php?id={$row_produto['id']}' onclick='return confirm(\"Tem certeza que deseja excluir?\")'>Excluir</a>
+                            </td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='3'>Nenhum produto cadastrado.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
     <?php
     // Fechar a conexão
     $conn->close();
     ?>
 </body>
-
 </html>

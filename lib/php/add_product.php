@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt_check_produto->num_rows > 0) {
         echo "Produto já cadastrado.";
         $stmt_check_produto->close();
-        exit; // Para a execução se o produto já existir
+        exit; 
     }
 
     $stmt_check_produto->close();
